@@ -1,0 +1,43 @@
+# Environment
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Node modules
+node_modules/
+dist/
+build/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Backups
+backup/
+local-backups/
+*.bak
+*.backup
+
+# Build
+dist-installer/
+dist-packager/
+build/
+
+# OS
+Thumbs.db
+.env
+.env.local

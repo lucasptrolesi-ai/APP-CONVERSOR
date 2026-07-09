@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#c9959f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Trolesi" />
+  <link rel="manifest" href="manifest.json" />
+  <title>Trolesi Joias | Conversor</title>
+  <style>
+    :root {
+      --rosa-trolesi: #c9959f;
+      --rosa-claro: #f8e8eb;
+      --vinho: #6f3f48;
+      --dourado: #c9a45c;
+      --champagne: #f4e4bd;
+      --branco: #fff;
+      --texto: #5d4449;
+      --sombra: rgba(74, 42, 48, .22);
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; min-height: 100%; font-family: Arial, Helvetica, sans-serif; }
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      color: var(--vinho);
+      background:
+        radial-gradient(circle at 10% 5%, rgba(255,255,255,.52), transparent 30%),
+        radial-gradient(circle at 90% 92%, rgba(201,164,92,.28), transparent 34%),
+        linear-gradient(135deg, var(--rosa-claro), var(--rosa-trolesi));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .app { width: 100%; max-width: 460px; }
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,.90);
+      border: 1px solid rgba(201,164,92,.58);
+      border-radius: 30px;
+      box-shadow: 0 24px 65px var(--sombra);
+      padding: 30px 24px 22px;
+      text-align: center;
+    }
+    .card:before {
+      content: "";
+      position: absolute;
+      inset: -80px -100px auto auto;
+      width: 210px;
+      height: 210px;
+      background: radial-gradient(circle, rgba(201,164,92,.34), transparent 68%);
+    }
+    .brand { position: relative; z-index: 1; }
+    .brand h1 {
+      margin: 0;
+      letter-spacing: 4px;
+      font-size: 25px;
+      text-transform: uppercase;
+    }
+    .gold-line {
+      width: 88px;
+      height: 2px;
+      margin: 13px auto 15px;
+      background: linear-gradient(90deg, transparent, var(--dourado), transparent);
+    }
+    .subtitle { margin: 0 0 24px; color: var(--texto); font-size: 15px; }
+    .field { text-align: left; }
+    label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 9px; }
+    input {
+      width: 100%;
+      height: 64px;
+      border-radius: 18px;
+      border: 1.5px solid rgba(201,164,92,.78);
+      background: var(--branco);
+      padding: 0 18px;
+      font-size: 30px;
+      text-align: center;
+      color: var(--vinho);
+      outline: none;
+      box-shadow: inset 0 2px 8px rgba(111,63,72,.07);
+    }
+    input:focus { box-shadow: 0 0 0 4px rgba(201,164,92,.16), inset 0 2px 8px rgba(111,63,72,.07); }
+    .result {
+      margin-top: 22px;
+      border: 1px solid rgba(201,164,92,.58);
+      border-radius: 23px;
+      padding: 21px 14px;
+      background: linear-gradient(135deg, #fff9ec, #fff);
+    }
+    .result span { display: block; font-size: 13px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--texto); margin-bottom: 8px; }
+    .result strong { display: block; font-size: 42px; line-height: 1.05; color: var(--vinho); }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+    button, .linkbtn {
+      border: none;
+      border-radius: 16px;
+      min-height: 48px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .primary { background: linear-gradient(135deg, var(--dourado), var(--champagne)); color: #5b3d18; }
+    .secondary { background: #fff; color: var(--vinho); border: 1px solid rgba(201,164,92,.55); }
+    .hint { margin: 15px 0 0; color: var(--texto); font-size: 12px; line-height: 1.45; }
+    .install { display: none; margin-top: 12px; padding: 13px; border-radius: 18px; background: rgba(255,255,255,.55); border: 1px solid rgba(201,164,92,.38); font-size: 13px; color: var(--texto); }
+    .android-note, .ios-note { display:none; }
+    .footer { margin-top: 14px; text-align:center; font-size: 12px; color: rgba(111,63,72,.85); }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="card">
+      <div class="brand">
+        <h1>Trolesi Joias</h1>
+        <div class="gold-line"></div>
+        <p class="subtitle">Conversor de código da peça</p>
+      </div>
+
+      <div class="field">
+        <label for="codigo">Digite o código</label>
+        <input id="codigo" inputmode="decimal" autocomplete="off" placeholder="Ex: 10,0" autofocus />
+      </div>
+
+      <div class="result" aria-live="polite">
+        <span>Valor da peça</span>
+        <strong id="resultado">R$ 0,00</strong>
+      </div>
+
+      <div class="actions">
+        <button class="secondary" type="button" id="limpar">Limpar</button>
+        <button class="primary" type="button" id="instalar">Instalar</button>
+      </div>
+
+      <div class="install android-note" id="androidNote">
+        Android detectado: instale na tela inicial. A bolinha flutuante exige um app Android nativo separado.
+      </div>
+      <div class="install ios-note" id="iosNote">
+        iPhone detectado: toque em Compartilhar e depois em “Adicionar à Tela de Início”.
+      </div>
+      <p class="hint">Use vírgula ou ponto. O valor é calculado automaticamente.</p>
+    </section>
+    <div class="footer">Atacado desde 1990</div>
+  </main>
+
+  <script>
+    const FATOR = 2.8;
+    const input = document.getElementById('codigo');
+    const resultado = document.getElementById('resultado');
+    const btnLimpar = document.getElementById('limpar');
+    const btnInstalar = document.getElementById('instalar');
+    const androidNote = document.getElementById('androidNote');
+    const iosNote = document.getElementById('iosNote');
+    let installPrompt = null;
+
+    function moeda(valor) {
+      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+    function calcular() {
+      const raw = input.value.trim().replace(',', '.');
+      const codigo = Number.parseFloat(raw);
+      if (!raw || Number.isNaN(codigo)) {
+        resultado.textContent = 'R$ 0,00';
+        return;
+      }
+      resultado.textContent = moeda(codigo * FATOR);
+    }
+
+    input.addEventListener('input', calcular);
+    btnLimpar.addEventListener('click', () => { input.value = ''; calcular(); input.focus(); });
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      installPrompt = e;
+      btnInstalar.style.display = 'inline-flex';
+    });
+
+    btnInstalar.addEventListener('click', async () => {
+      if (installPrompt) {
+        installPrompt.prompt();
+        await installPrompt.userChoice;
+        installPrompt = null;
+      } else {
+        const isiOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        alert(isiOS ? 'No iPhone: toque em Compartilhar e depois em Adicionar à Tela de Início.' : 'No Android: abra o menu do navegador e toque em Instalar app ou Adicionar à tela inicial.');
+      }
+    });
+
+    const ua = navigator.userAgent.toLowerCase();
+    if (/android/.test(ua)) androidNote.style.display = 'block';
+    if (/iphone|ipad|ipod/.test(ua)) iosNote.style.display = 'block';
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+    }
+  </script>
+</body>
+</html>
