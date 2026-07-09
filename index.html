@@ -6,9 +6,10 @@
   <meta name="theme-color" content="#c9959f" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Trolesi" />
+  <meta name="apple-mobile-web-app-title" content="Trolesi Connect" />
+  <meta name="description" content="Trolesi Connect - Ferramentas para revendedores Trolesi Joias. Conversor de código, histórico e acesso direto." />
   <link rel="manifest" href="manifest.json" />
-  <title>Trolesi Joias | Conversor</title>
+  <title>Trolesi Connect | Ferramentas para Revendedores</title>
   <style>
     :root {
       --rosa-trolesi: #c9959f;
@@ -19,9 +20,10 @@
       --branco: #fff;
       --texto: #5d4449;
       --sombra: rgba(74, 42, 48, .22);
+      --verde-whats: #25d366;
     }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { margin: 0; min-height: 100%; font-family: Arial, Helvetica, sans-serif; }
+    html, body { margin: 0; min-height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
     body {
       min-height: 100vh;
       min-height: 100dvh;
@@ -31,20 +33,71 @@
         radial-gradient(circle at 90% 92%, rgba(201,164,92,.28), transparent 34%),
         linear-gradient(135deg, var(--rosa-claro), var(--rosa-trolesi));
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+    }
+    .app { 
+      width: 100%; 
+      max-width: 460px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+    
+    /* Header */
+    .header {
+      background: var(--branco);
+      border-bottom: 1px solid rgba(201,164,92,.2);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px var(--sombra);
+    }
+    .logo-header { font-size: 16px; font-weight: 700; color: var(--vinho); letter-spacing: 2px; }
+    .header-actions { display: flex; gap: 12px; }
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      padding: 8px;
+      border-radius: 12px;
+      transition: background 0.2s;
+    }
+    .icon-btn:hover { background: rgba(201,164,92,.1); }
+
+    /* Content */
+    .content {
+      flex: 1;
+      display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      overflow-y: auto;
     }
-    .app { width: 100%; max-width: 460px; }
+
+    /* Card */
     .card {
       position: relative;
       overflow: hidden;
-      background: rgba(255,255,255,.90);
+      background: rgba(255,255,255,.95);
       border: 1px solid rgba(201,164,92,.58);
       border-radius: 30px;
       box-shadow: 0 24px 65px var(--sombra);
       padding: 30px 24px 22px;
       text-align: center;
+      width: 100%;
+      animation: slideIn 0.4s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .card:before {
       content: "";
@@ -56,10 +109,11 @@
     }
     .brand { position: relative; z-index: 1; }
     .brand h1 {
-      margin: 0;
+      margin: 0 0 8px;
       letter-spacing: 4px;
-      font-size: 25px;
+      font-size: 28px;
       text-transform: uppercase;
+      color: var(--vinho);
     }
     .gold-line {
       width: 88px;
@@ -67,9 +121,42 @@
       margin: 13px auto 15px;
       background: linear-gradient(90deg, transparent, var(--dourado), transparent);
     }
-    .subtitle { margin: 0 0 24px; color: var(--texto); font-size: 15px; }
+    .subtitle { margin: 0 0 24px; color: var(--texto); font-size: 15px; font-weight: 500; }
+    
+    /* Home Buttons */
+    .home-section { display: flex; flex-direction: column; gap: 16px; }
+    .home-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .home-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 24px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(201,164,92,.4);
+      background: rgba(255,255,255,.6);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--vinho);
+    }
+    .home-btn:active { transform: scale(0.95); }
+    .home-btn-icon { font-size: 32px; }
+    .home-btn.whatsapp { background: var(--verde-whats); color: var(--branco); border: none; }
+
+    /* Sections */
+    .converter-section, .history-section { display: none; }
+    .converter-section.active, .history-section.active { display: block; }
+    
     .field { text-align: left; }
-    label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 9px; }
+    label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 9px; color: var(--vinho); }
     input {
       width: 100%;
       height: 64px;
@@ -82,8 +169,11 @@
       color: var(--vinho);
       outline: none;
       box-shadow: inset 0 2px 8px rgba(111,63,72,.07);
+      font-weight: 500;
     }
     input:focus { box-shadow: 0 0 0 4px rgba(201,164,92,.16), inset 0 2px 8px rgba(111,63,72,.07); }
+    input::placeholder { color: rgba(111,63,72,.4); }
+    
     .result {
       margin-top: 22px;
       border: 1px solid rgba(201,164,92,.58);
@@ -92,7 +182,8 @@
       background: linear-gradient(135deg, #fff9ec, #fff);
     }
     .result span { display: block; font-size: 13px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--texto); margin-bottom: 8px; }
-    .result strong { display: block; font-size: 42px; line-height: 1.05; color: var(--vinho); }
+    .result strong { display: block; font-size: 42px; line-height: 1.05; color: var(--vinho); font-weight: 700; }
+    
     .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
     button, .linkbtn {
       border: none;
@@ -105,99 +196,315 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
+    button:active { transform: scale(0.98); }
     .primary { background: linear-gradient(135deg, var(--dourado), var(--champagne)); color: #5b3d18; }
-    .secondary { background: #fff; color: var(--vinho); border: 1px solid rgba(201,164,92,.55); }
+    .secondary { background: #fff; color: var(--vinho); border: 1.5px solid rgba(201,164,92,.55); }
+    .secondary:hover { background: rgba(201,164,92,.05); }
+    
+    /* History */
+    .history-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      background: rgba(255,255,255,.6);
+      border: 1px solid rgba(201,164,92,.3);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .history-item:active { transform: scale(0.98); background: rgba(201,164,92,.05); }
+    .history-code { font-weight: 700; color: var(--vinho); font-size: 16px; }
+    .history-value { color: var(--dourado); font-weight: 700; }
+    .history-empty { text-align: center; color: var(--texto); padding: 40px 20px; font-size: 14px; }
+
+    /* Footer */
+    .footer {
+      background: var(--branco);
+      border-top: 1px solid rgba(201,164,92,.2);
+      padding: 16px 20px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(111,63,72,.75);
+      line-height: 1.6;
+      box-shadow: 0 -2px 8px var(--sombra);
+    }
+    .footer-brand { font-weight: 700; color: var(--vinho); margin-bottom: 4px; }
+    
     .hint { margin: 15px 0 0; color: var(--texto); font-size: 12px; line-height: 1.45; }
-    .install { display: none; margin-top: 12px; padding: 13px; border-radius: 18px; background: rgba(255,255,255,.55); border: 1px solid rgba(201,164,92,.38); font-size: 13px; color: var(--texto); }
-    .android-note, .ios-note { display:none; }
-    .footer { margin-top: 14px; text-align:center; font-size: 12px; color: rgba(111,63,72,.85); }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .app { max-width: 100%; }
+      .card { border-radius: 24px; padding: 24px 20px; }
+      .brand h1 { font-size: 24px; }
+      .content { padding: 16px; }
+    }
   </style>
 </head>
 <body>
-  <main class="app">
-    <section class="card">
-      <div class="brand">
-        <h1>Trolesi Joias</h1>
-        <div class="gold-line"></div>
-        <p class="subtitle">Conversor de código da peça</p>
+  <div class="app">
+    <header class="header">
+      <div class="logo-header">TROLESI CONNECT</div>
+      <div class="header-actions">
+        <button class="icon-btn" id="btnHome" title="Início">🏠</button>
+        <button class="icon-btn" id="btnInstallHeader" style="display:none;" title="Instalar app">⬇️</button>
       </div>
+    </header>
 
-      <div class="field">
-        <label for="codigo">Digite o código</label>
-        <input id="codigo" inputmode="decimal" autocomplete="off" placeholder="Ex: 10,0" autofocus />
-      </div>
+    <main class="content">
+      <section class="card">
+        <!-- Home -->
+        <div id="homeView" class="home-section">
+          <div class="brand">
+            <h1>Trolesi Connect</h1>
+            <div class="gold-line"></div>
+            <p class="subtitle">Ferramentas para revendedores</p>
+          </div>
 
-      <div class="result" aria-live="polite">
-        <span>Valor da peça</span>
-        <strong id="resultado">R$ 0,00</strong>
-      </div>
+          <div class="home-buttons">
+            <button class="home-btn" id="btnConverter">
+              <span class="home-btn-icon">🔢</span>
+              <span>Conversor</span>
+            </button>
+            <button class="home-btn whatsapp" id="btnWhatsApp">
+              <span class="home-btn-icon">💬</span>
+              <span>WhatsApp</span>
+            </button>
+            <button class="home-btn" id="btnHistory">
+              <span class="home-btn-icon">📋</span>
+              <span>Histórico</span>
+            </button>
+            <button class="home-btn" id="btnInstallHome">
+              <span class="home-btn-icon">📱</span>
+              <span>Instalar</span>
+            </button>
+          </div>
+        </div>
 
-      <div class="actions">
-        <button class="secondary" type="button" id="limpar">Limpar</button>
-        <button class="primary" type="button" id="instalar">Instalar</button>
-      </div>
+        <!-- Converter -->
+        <div id="converterView" class="converter-section">
+          <div class="brand">
+            <h1>Conversor</h1>
+            <div class="gold-line"></div>
+            <p class="subtitle">Digite o código da peça</p>
+          </div>
 
-      <div class="install android-note" id="androidNote">
-        Android detectado: instale na tela inicial. A bolinha flutuante exige um app Android nativo separado.
-      </div>
-      <div class="install ios-note" id="iosNote">
-        iPhone detectado: toque em Compartilhar e depois em “Adicionar à Tela de Início”.
-      </div>
-      <p class="hint">Use vírgula ou ponto. O valor é calculado automaticamente.</p>
-    </section>
-    <div class="footer">Atacado desde 1990</div>
-  </main>
+          <div class="field">
+            <label for="codigo">Código</label>
+            <input id="codigo" inputmode="decimal" autocomplete="off" placeholder="Ex: 10,0" autofocus />
+          </div>
+
+          <div class="result" aria-live="polite">
+            <span>Valor da peça</span>
+            <strong id="resultado">R$ 0,00</strong>
+          </div>
+
+          <div class="actions">
+            <button class="secondary" type="button" id="limpar">Limpar</button>
+            <button class="primary" type="button" id="copiar">Copiar</button>
+          </div>
+
+          <p class="hint">Use vírgula ou ponto. Ex: 10,5 ou 10.5</p>
+        </div>
+
+        <!-- History -->
+        <div id="historyView" class="history-section">
+          <div class="brand" style="margin-bottom: 20px;">
+            <h1>Histórico</h1>
+            <div class="gold-line"></div>
+          </div>
+
+          <ul class="history-list" id="historyList"></ul>
+
+          <button class="secondary" type="button" id="limparHistorico" style="width: 100%; margin-top: 16px;">Limpar Histórico</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-brand">Trolesi Joias</div>
+      <div>Atacado desde 1990</div>
+      <div>Itajubá - MG</div>
+    </footer>
+  </div>
 
   <script>
+    // CONFIG
     const FATOR = 2.8;
+    const WHATSAPP_NUMBER = '5535999999999';
+
+    // DOM
     const input = document.getElementById('codigo');
     const resultado = document.getElementById('resultado');
+    const btnHome = document.getElementById('btnHome');
+    const btnConverter = document.getElementById('btnConverter');
+    const btnWhatsApp = document.getElementById('btnWhatsApp');
+    const btnHistory = document.getElementById('btnHistory');
     const btnLimpar = document.getElementById('limpar');
-    const btnInstalar = document.getElementById('instalar');
-    const androidNote = document.getElementById('androidNote');
-    const iosNote = document.getElementById('iosNote');
+    const btnCopiar = document.getElementById('copiar');
+    const limparHistorico = document.getElementById('limparHistorico');
+    const historyList = document.getElementById('historyList');
+    const btnInstalarHome = document.getElementById('btnInstallHome');
+    const btnInstalarHeader = document.getElementById('btnInstallHeader');
+    const homeView = document.getElementById('homeView');
+    const converterView = document.getElementById('converterView');
+    const historyView = document.getElementById('historyView');
     let installPrompt = null;
 
+    // Formata valor em Real
     function moeda(valor) {
       return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
+
+    // Normaliza entrada (vírgula para ponto)
+    function normalizar(texto) {
+      return texto.trim().replace(',', '.');
+    }
+
+    // Calcula valor automaticamente
     function calcular() {
-      const raw = input.value.trim().replace(',', '.');
+      const raw = normalizar(input.value);
       const codigo = Number.parseFloat(raw);
       if (!raw || Number.isNaN(codigo)) {
         resultado.textContent = 'R$ 0,00';
-        return;
+        return { codigo: '', valor: 0 };
       }
-      resultado.textContent = moeda(codigo * FATOR);
+      const valor = codigo * FATOR;
+      resultado.textContent = moeda(valor);
+      return { codigo: input.value, valor };
     }
 
+    // Eventos do conversor
     input.addEventListener('input', calcular);
-    btnLimpar.addEventListener('click', () => { input.value = ''; calcular(); input.focus(); });
 
+    btnLimpar.addEventListener('click', () => {
+      input.value = '';
+      calcular();
+      input.focus();
+    });
+
+    btnCopiar.addEventListener('click', () => {
+      const valor = resultado.textContent;
+      navigator.clipboard.writeText(valor).then(() => {
+        const txt = btnCopiar.textContent;
+        btnCopiar.textContent = 'Copiado!';
+        setTimeout(() => { btnCopiar.textContent = txt; }, 2000);
+      });
+    });
+
+    // Salva no histórico ao sair do input
+    input.addEventListener('blur', () => {
+      const { codigo, valor } = calcular();
+      if (codigo && valor > 0) {
+        salvarNoHistorico(codigo, valor);
+      }
+    });
+
+    // Navegação entre seções
+    function showView(view) {
+      homeView.classList.remove('active');
+      converterView.classList.remove('active');
+      historyView.classList.remove('active');
+      view.classList.add('active');
+    }
+
+    btnHome.addEventListener('click', () => showView(homeView));
+    btnConverter.addEventListener('click', () => { 
+      showView(converterView); 
+      input.focus(); 
+    });
+    btnWhatsApp.addEventListener('click', () => {
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}`, '_blank');
+    });
+    btnHistory.addEventListener('click', () => { 
+      showView(historyView); 
+      renderHistory(); 
+    });
+
+    // Histórico com localStorage
+    function salvarNoHistorico(codigo, valor) {
+      let historico = JSON.parse(localStorage.getItem('trolesiHistorico') || '[]');
+      historico.unshift({ codigo, valor, data: new Date().toISOString() });
+      historico = historico.slice(0, 5); // Máximo 5 itens
+      localStorage.setItem('trolesiHistorico', JSON.stringify(historico));
+    }
+
+    function renderHistory() {
+      const historico = JSON.parse(localStorage.getItem('trolesiHistorico') || '[]');
+      historyList.innerHTML = '';
+      
+      if (historico.length === 0) {
+        historyList.innerHTML = '<div class="history-empty">Nenhum código consultado ainda</div>';
+        return;
+      }
+
+      historico.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'history-item';
+        li.innerHTML = `
+          <span class="history-code">${item.codigo}</span>
+          <span class="history-value">${moeda(item.valor)}</span>
+        `;
+        li.addEventListener('click', () => {
+          input.value = item.codigo;
+          calcular();
+          showView(converterView);
+          input.focus();
+        });
+        historyList.appendChild(li);
+      });
+    }
+
+    limparHistorico.addEventListener('click', () => {
+      if (confirm('Deseja limpar o histórico?')) {
+        localStorage.removeItem('trolesiHistorico');
+        renderHistory();
+      }
+    });
+
+    // PWA - Instalação
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       installPrompt = e;
-      btnInstalar.style.display = 'inline-flex';
+      btnInstalarHome.style.display = 'flex';
+      btnInstalarHeader.style.display = 'block';
     });
 
-    btnInstalar.addEventListener('click', async () => {
+    function handleInstall() {
       if (installPrompt) {
         installPrompt.prompt();
-        await installPrompt.userChoice;
-        installPrompt = null;
+        installPrompt.userChoice.then(() => {
+          installPrompt = null;
+        });
       } else {
         const isiOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-        alert(isiOS ? 'No iPhone: toque em Compartilhar e depois em Adicionar à Tela de Início.' : 'No Android: abra o menu do navegador e toque em Instalar app ou Adicionar à tela inicial.');
+        if (isiOS) {
+          alert('iPhone: toque em Compartilhar e depois em "Adicionar à Tela de Início".');
+        } else {
+          alert('Android: abra o menu do navegador e toque em "Instalar app" ou "Adicionar à tela inicial".');
+        }
       }
-    });
+    }
 
-    const ua = navigator.userAgent.toLowerCase();
-    if (/android/.test(ua)) androidNote.style.display = 'block';
-    if (/iphone|ipad|ipod/.test(ua)) iosNote.style.display = 'block';
+    btnInstalarHome.addEventListener('click', handleInstall);
+    btnInstalarHeader.addEventListener('click', handleInstall);
 
+    // Init
+    showView(homeView);
+
+    // Service Worker
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => {
+          console.warn('SW error:', err);
+        });
+      });
     }
   </script>
 </body>

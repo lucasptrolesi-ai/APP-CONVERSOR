@@ -1,11 +1,11 @@
 {
-  "name": "Trolesi Joias - Conversor",
+  "name": "Trolesi Connect",
   "short_name": "Trolesi",
-  "start_url": "./index.html",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#f8e8eb",
   "theme_color": "#c9959f",
-  "description": "Conversor de código da peça para valor Trolesi Joias.",
+  "description": "Trolesi Connect - Ferramentas para revendedores Trolesi Joias. Conversor de código da peça, histórico e acesso direto.",
   "icons": [
     { "src": "icon-192.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" },
     { "src": "icon-512.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
